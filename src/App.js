@@ -23,7 +23,7 @@ class App extends Component {
                 id={`custom-checkbox-${index}`}
                 name="notifications"
                 value={email}
-                checked={this.state.checkedItems.get(notifications.showName)}
+                //checked={this.state.checkedItems.get(notifications.showName)}
                 onChange={this.handleChange}
               />
               <label>{showName} </label>
