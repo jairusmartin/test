@@ -3,12 +3,22 @@ import { notifications } from "./utils/notifications";
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: "User Name" };
+    this.state = {
+      checkedItems: new Map(),
+      notifications: []
+    };
   }
 
   handleChange = (e) => {
     console.log(e.target);
-    //this.setState({ name: event.target.value });
+    console.log(e.target.name);
+    const item = e.target.name;
+    const isChecked = e.target.checked;
+    console.log(this.state);
+
+    this.setState((s) => ({
+      checkedItems: s.checkedItems.set(item, isChecked)
+    }));
   };
 
   render() {
@@ -21,9 +31,9 @@ class App extends Component {
               <input
                 type="checkbox"
                 id={`custom-checkbox-${index}`}
-                name="notifications"
+                name={showName}
                 value={email}
-                //checked={this.state.checkedItems.get(notifications.showName)}
+                checked={this.state.checkedItems.get(notifications.showName)}
                 onChange={this.handleChange}
               />
               <label>{showName} </label>
