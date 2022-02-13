@@ -9,29 +9,21 @@ class App extends Component {
       // should contain just the emails address of the checked items only
       emailSendList: []
     };
+
+    console.log(this.state.emailPickList);
   }
 
   handleChange = (e) => {
     //1. if person is checked, add to emails array, otherwise remove from emails
     //2. update sendlist ischecked for display;
 
-    /* 
-     // I was unable to get this syntax to work...do you know why?
-    let emailPickList = this.state.emailPickList.map((el, index) => {
-      // /console.log(index);
-      console.log(el);
-      return false;
-    });
-    */
-    let emailPickList = [...this.state.emailPickList];
-    let index = this.state.emailPickList.findIndex(
-      (el) => el.name === e.target.name
+    let emailPickList = this.state.emailPickList.map((el, index) =>
+      el.name === e.target.name ? { ...el, isChecked: e.target.checked } : el
     );
-    emailPickList[index] = {
-      ...emailPickList[index],
-      isChecked: e.target.checked
-    };
-    this.setState({ emailPickList });
+
+    this.setState({ emailPickList }, () =>
+      console.log(this.state.emailPickList)
+    );
   };
 
   render() {
@@ -61,6 +53,11 @@ class App extends Component {
           </p>
           <ol>
             Note: this should display a list of the checked emails address
+            {this.state.emailPickList
+              .filter((el) => el.isChecked)
+              .map((el, index) => (
+                <li key={el.name}>{el.email}</li>
+              ))}
           </ol>
         </div>
       </div>
