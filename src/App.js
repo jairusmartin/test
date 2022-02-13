@@ -1,45 +1,68 @@
 import React, { Component } from "react";
-import { notifications } from "./utils/notifications";
+import { list } from "./utils/emails";
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkedItems: new Map(),
-      notifications: []
+      // initial config with some default items checked
+      emailPickList: list,
+      // should contain just the emails address of the checked items only
+      emailSendList: []
     };
   }
 
   handleChange = (e) => {
-    console.log(e.target);
-    console.log(e.target.name);
-    const item = e.target.name;
-    const isChecked = e.target.checked;
-    console.log(this.state);
+    //1. if person is checked, add to emails array, otherwise remove from emails
+    //2. update sendlist ischecked for display;
 
-    this.setState((s) => ({
-      checkedItems: s.checkedItems.set(item, isChecked)
-    }));
+    /* 
+     // I was unable to get this syntax to work...do you know why?
+    let emailPickList = this.state.emailPickList.map((el, index) => {
+      // /console.log(index);
+      console.log(el);
+      return false;
+    });
+    */
+    let emailPickList = [...this.state.emailPickList];
+    let index = this.state.emailPickList.findIndex(
+      (el) => el.name === e.target.name
+    );
+    emailPickList[index] = {
+      ...emailPickList[index],
+      isChecked: e.target.checked
+    };
+    this.setState({ emailPickList });
   };
 
   render() {
     return (
       <div>
-        <h1>title</h1>
-        {notifications.map(({ showName, email, isChecked }, index) => {
+        <h1>Check emails which should receive an update:</h1>
+        {this.state.emailPickList.map(({ name, email, isChecked }, index) => {
           return (
             <span key={`some-${index}`}>
               <input
                 type="checkbox"
                 id={`custom-checkbox-${index}`}
-                name={showName}
+                name={name}
                 value={email}
-                checked={this.state.checkedItems.get(notifications.showName)}
+                checked={isChecked}
+                // defaultChecked={isChecked}
                 onChange={this.handleChange}
               />
-              <label>{showName} </label>
+              <label>{name} </label>
             </span>
           );
         })}
+        <div>
+          <p>
+            <b>Emails Checked:</b>
+            <br />
+          </p>
+          <ol>
+            Note: this should display a list of the checked emails address
+          </ol>
+        </div>
       </div>
     );
   }
